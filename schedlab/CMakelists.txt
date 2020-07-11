@@ -1,0 +1,80 @@
+add_executable(trace_gen
+    trace_gen.cc
+    task.cc)
+target_link_libraries(trace_gen
+    PRIVATE nlohmann_json::nlohmann_json)
+
+add_executable(sim
+    sim.cc
+    task.cc
+    event.cc
+    policy_wrapper.cc
+    policy.cc)
+target_link_libraries(sim
+    PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(sim
+    PRIVATE $<$<CONFIG:Debug>:SCHED_DEBUG>
+)
+
+add_executable(sim_java
+    sim.cc
+    task.cc
+    event.cc
+    policy_wrapper.cc
+    policy.cc)
+target_include_directories(sim_java
+    PRIVATE
+    "$ENV{JAVA_HOME}/include"
+    "$ENV{JAVA_HOME}/include/darwin"
+    "$ENV{JAVA_HOME}/include/linux"
+)
+target_link_directories(sim_java
+    PRIVATE
+    "$ENV{JAVA_HOME}/lib/server"
+)
+target_link_libraries(sim_java
+    PRIVATE nlohmann_json::nlohmann_json jvm)
+target_compile_definitions(sim_java
+    PRIVATE JAVA_SOLUTION
+    PRIVATE $<$<CONFIG:Debug>:SCHED_DEBUG>
+)
+
+add_executable(sim_cpp
+    sim.cc
+    task.cc
+    event.cc
+    policy_wrapper.cc
+    policy.cc)
+target_link_libraries(sim_cpp
+    PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(sim_cpp
+    PRIVATE CPP_SOLUTION
+    PRIVATE $<$<CONFIG:Debug>:SCHED_DEBUG>
+)
+
+add_executable(sim_cpp_rr
+    sim.cc
+    task.cc
+    event.cc
+    policy_wrapper.cc
+    policy_rr.cc)
+#    policy_fifo.cc)
+target_link_libraries(sim_cpp_rr
+    PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(sim_cpp_rr
+    PRIVATE CPP_SOLUTION
+    PRIVATE $<$<CONFIG:Debug>:SCHED_DEBUG>
+)
+
+add_executable(sim_cpp_edf
+    sim.cc
+    task.cc
+    event.cc
+    policy_wrapper.cc
+    policy_edf.cc)
+target_link_libraries(sim_cpp_edf
+    PRIVATE nlohmann_json::nlohmann_json)
+target_compile_definitions(sim_cpp_edf
+    PRIVATE CPP_SOLUTION
+    PRIVATE $<$<CONFIG:Debug>:SCHED_DEBUG>
+)
